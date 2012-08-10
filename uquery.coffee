@@ -1,8 +1,7 @@
-
 class DomDecor
 
-  #E is a global variable defining a JQuery result, it should be set to the argument passed in.
-  #recache is a helper method defined below that initialized a few more global variables, e and length
+  # E is a global variable defining the elements in a JQuery result, it should be set to the argument passed in.
+  # recache is a helper method defined below that initialized a few more global variables, e and length
   # We throw an error if e doesn't have a tagname.
   constructor: (arg)->
     this.E = if not arg or arg.length is 0 then [] else (if arg.length then arg else [arg])
@@ -15,7 +14,7 @@ class DomDecor
       f.apply e, [e, i]
 
   # For each element in this query, remote it from this query
-  # Reset global variables E and recache
+  # Empty the element list (E) and caches.
   # return
   remove: ()->
     this.each ()->
@@ -29,11 +28,11 @@ class DomDecor
   filter: (f)->
     U (e for e in this.E when f.apply e)
   
-  #Return element of E at index n
+  # Return element of E at index n
   get: (n)->
     this.E[n]
 
-  #Return new Jquery result consisting of element of E at index n
+  # Return new JQuery result consisting of element of E at index n
   eq: (n)->
     U this.get n
 
@@ -48,19 +47,19 @@ class DomDecor
         return i
     -1
   
-  # Set global variables e and length to first element of E and the
+  # Set member variables e and length to first element of E and the
   # length of E respectively
   _recache: ->
     this.e = this.E[0]
     this.length = this.E.length
 
-  # We are given an object o that we assume to be an array of JQuery Results
-  # or a single JQuery result. 
-  # We add it to E then call recache to readjust global variables e and length.
+  # We are given an object o that we assume to be an array of DOM elements
+  # or a single JQuery object. 
+  # We add it to E then call recache to readjust member variables e and length.
   add: (o)->
     for item in (o.E ? o)
       this.E.push item
-    this_recache()
+    this._recache()
     this
 
   match: (selector)->
@@ -118,6 +117,7 @@ window.uQuery = uQuery = U = (selector, context=document) ->
     e = selector.E or selector
   new DomDecor e
 
+# merge two or more objects, with preference to attributes in earlier arguments.
 U.extend = (a...)->
   i = a.length
   while i
