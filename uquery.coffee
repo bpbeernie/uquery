@@ -1,14 +1,14 @@
 class DomDecor
 
-  # E is a global variable defining the elements in a JQuery result, it should be set to the argument passed in.
-  # recache is a helper method defined below that initialized a few more global variables, e and length
+  # E is a member variable defining the elements in a JQuery result, it should be set to the argument passed in.
+  # recache is a helper method defined below that initialized a few more member variables, e and length
   # We throw an error if e doesn't have a tagname.
   constructor: (arg)->
     this.E = if not arg or arg.length is 0 then [] else (if arg.length then arg else [arg])
     this._recache()
     if this.e and not this.e.tagName then throw "e `"+this.e+"`has not tagName."
 
-  #For each element in this query, execute function f
+  #F or each element in this query, execute function f
   each: (f)->
     for i, e of this.E
       f.apply e, [e, i]
