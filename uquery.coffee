@@ -1,30 +1,46 @@
 
 class DomDecor
-  constructor: (arg)->
-    @E = if not arg or arg.length is 0 then [] else (if arg.length then arg else [arg])
-    @_recache()
-    if @e and not @e.tagName then throw "e `"+@e+"`has not tagName."
 
+  #E is a global variable defining a JQuery result, it should be set to the argument passed in.
+  #recache is a helper method defined below that initialized a few more global variables, e and length
+  # We throw an error if e doesn't have a tagname.
+  constructor: (arg)->
+    this.E = if not arg or arg.length is 0 then [] else (if arg.length then arg else [arg])
+    this._recache()
+    if this.e and not this.e.tagName then throw "e `"+this.e+"`has not tagName."
+
+  #For each element in this query, execute function f
   each: (f)->
-    for i, e of @E
+    for i, e of this.E
       f.apply e, [e, i]
 
-  remove: ->
-    @each ->
-      @parentNode.removeChild @
-    @E = []
-    @_recache()
-    @
+  # For each element in this query, remote it from this query
+  # Reset global variables E and recache
+  # return
+  remove: ()->
+    this.each ()->
+      this.parentNode.removeChild this
+    this.E = []
+    this._recache()
+    this
   
+  # For each element in E, if satisfies condition provided by function 'f', return a
+  # new JQuery Result consisting of all such elements e
   filter: (f)->
-    U (e for e in @E when f.apply e)
+    U (e for e in this.E when f.apply e)
   
+  #Return element of E at index n
   get: (n)->
-    @E[n]
+    this.E[n]
 
+  #Return new Jquery result consisting of element of E at index n
   eq: (n)->
-    U @get n
+    U this.get n
 
+  # We are given an object o that we assume to be an array of JQuery Results
+  # or a single JQuery result. 
+  # If we are given an array, we look for a match for the first element of that array 
+  # to the element of E and return the index of the element of e for which it matches.
   index: (o)->
     o = o.e or o
     for i,e of @E
@@ -32,18 +48,24 @@ class DomDecor
         return i
     -1
   
+  # Set global variables e and length to first element of E and the
+  # length of E respectively
   _recache: ->
-    @e = @E[0]
-    @length = @E.length
+    this.e = this.E[0]
+    this.length = this.E.length
 
+  # We are given an object o that we assume to be an array of JQuery Results
+  # or a single JQuery result. 
+  # We add it to E then call recache to readjust global variables e and length.
   add: (o)->
     for item in (o.E ? o)
-      @E.push item
-    @_recache()
-    @
+      this.E.push item
+    this_recache()
+    this
 
   match: (selector)->
-    matchSelector @e, selector
+    matchSelector this.e, selector
+
 
 matchSelector = (e, selector)->
   m = parseSelector selector
