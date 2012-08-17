@@ -11,7 +11,7 @@ class DomDecor
   #F or each element in this query, execute function f
   each: (f)->
     for i, e of this.E
-      f.apply e, [e, i]
+      f.apply e, [i, e]
 
   # For each element in this query, remote it from this query
   # Empty the element list (E) and caches.
@@ -66,6 +66,8 @@ class DomDecor
   match: (selector)->
     matchSelector this.e, selector
 
+  toString: ->
+    @E
 
 matchSelector = (e, selector)->
   m = parseSelector selector
