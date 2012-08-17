@@ -1,17 +1,24 @@
 class DomDecor
 
   # E is a member variable defining the elements in a JQuery result, it should be set to the argument passed in.
-  # recache is a helper method defined below that initialized a few more member variables, e and length
   # We throw an error if e doesn't have a tagname.
   constructor: (arg)->
-    this.E = if not arg or arg.length is 0 then [] else (if arg.length then arg else [arg])
-    this._recache()
+    if arg
+      if not arg.length
+        arg = [arg]
+    else
+      arg = []
+    for i,a of arg
+      @[i] = a
+    @length = arg.length
     if this.e and not this.e.tagName then throw "e `"+this.e+"`has not tagName."
 
   #F or each element in this query, execute function f
   each: (f)->
-    for i, e of this.E
-      f.apply e, [i, e]
+    i = 0
+    while @[i]
+      f.apply @[i], [i, @[i]]
+      i += 1
 
   # For each element in this query, remote it from this query
   # Empty the element list (E) and caches.
@@ -19,14 +26,12 @@ class DomDecor
   remove: ()->
     this.each ()->
       this.parentNode.removeChild this
-    this.E = []
-    this._recache()
     this
   
   # For each element in E, if satisfies condition provided by function 'f', return a
   # new JQuery Result consisting of all such elements e
   filter: (f)->
-    U (e for e in this.E when f.apply e)
+    U (e for e in this.toArray() when f.apply e)
   
   # Return element of E at index n
   get: (n)->
@@ -42,32 +47,33 @@ class DomDecor
   # to the element of E and return the index of the element of e for which it matches.
   index: (o)->
     o = o.e or o
-    for i,e of @E
-      if e is o or matchSelector(e, o)
+    i = 0
+    while @[i]
+      if @[i] is o or matchSelector(e, o)
         return i
+      i += 1
     -1
   
-  # Set member variables e and length to first element of E and the
-  # length of E respectively
-  _recache: ->
-    this.e = this.E[0]
-    this.length = this.E.length
+  splice: ->
 
   # We are given an object o that we assume to be an array of DOM elements
   # or a single JQuery object. 
-  # We add it to E then call recache to readjust member variables e and length.
   add: (o)->
     for item in (o.E ? o)
       this.E.push item
-    this._recache()
     this
   
   #
   match: (selector)->
     matchSelector this.e, selector
 
-  toString: ->
-    @E
+  toArray: ->
+    arr = []
+    i = 0
+    while @[i]
+      arr.push @[i]
+      i+=1
+    arr
 
 matchSelector = (e, selector)->
   m = parseSelector selector

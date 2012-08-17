@@ -5,18 +5,27 @@
   DomDecor = (function() {
 
     function DomDecor(arg) {
-      this.E = !arg || arg.length === 0 ? [] : (arg.length ? arg : [arg]);
-      this._recache();
+      var a, i;
+      if (arg) {
+        if (!arg.length) arg = [arg];
+      } else {
+        arg = [];
+      }
+      for (i in arg) {
+        a = arg[i];
+        this[i] = a;
+      }
+      this.length = arg.length;
       if (this.e && !this.e.tagName) throw "e `" + this.e + "`has not tagName.";
     }
 
     DomDecor.prototype.each = function(f) {
-      var e, i, _ref, _results;
-      _ref = this.E;
+      var i, _results;
+      i = 0;
       _results = [];
-      for (i in _ref) {
-        e = _ref[i];
-        _results.push(f.apply(e, [i, e]));
+      while (this[i]) {
+        f.apply(this[i], [i, this[i]]);
+        _results.push(i += 1);
       }
       return _results;
     };
@@ -25,8 +34,6 @@
       this.each(function() {
         return this.parentNode.removeChild(this);
       });
-      this.E = [];
-      this._recache();
       return this;
     };
 
@@ -34,7 +41,7 @@
       var e;
       return U((function() {
         var _i, _len, _ref, _results;
-        _ref = this.E;
+        _ref = this.toArray();
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           e = _ref[_i];
@@ -53,20 +60,17 @@
     };
 
     DomDecor.prototype.index = function(o) {
-      var e, i, _ref;
+      var i;
       o = o.e || o;
-      _ref = this.E;
-      for (i in _ref) {
-        e = _ref[i];
-        if (e === o || matchSelector(e, o)) return i;
+      i = 0;
+      while (this[i]) {
+        if (this[i] === o || matchSelector(e, o)) return i;
+        i += 1;
       }
       return -1;
     };
 
-    DomDecor.prototype._recache = function() {
-      this.e = this.E[0];
-      return this.length = this.E.length;
-    };
+    DomDecor.prototype.splice = function() {};
 
     DomDecor.prototype.add = function(o) {
       var item, _i, _len, _ref, _ref2;
@@ -75,7 +79,6 @@
         item = _ref2[_i];
         this.E.push(item);
       }
-      this._recache();
       return this;
     };
 
@@ -83,8 +86,15 @@
       return matchSelector(this.e, selector);
     };
 
-    DomDecor.prototype.toString = function() {
-      return this.E;
+    DomDecor.prototype.toArray = function() {
+      var arr, i;
+      arr = [];
+      i = 0;
+      while (this[i]) {
+        arr.push(this[i]);
+        i += 1;
+      }
+      return arr;
     };
 
     return DomDecor;
