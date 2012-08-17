@@ -3,25 +3,22 @@ $ ->
   UnitTest.run ->
 
     window.Q = uQuery
-    @assertEvalEqual 4, "Q('div').length"
-    @assertEvalEqual 0, "Q('dl').length"
-    @assertEvalEqual 3, "Q('.desert').length"
-    @assertEvalEqual 1, "Q('#pie').length"
-    @assertEvalEqual 3, "Q('div.desert').length"
-    @assertEvalEqual 'icing', "Q('div.desert .desert').get(0).id"
-    @assertEvalEqual 'desert', "Q('div#pie').get(0).className"
 
-    # there are not vegetables
-    @assertEvalEqual 0, "Q('#lettuce').length"
-    @assertEvalEqual 0, "Q('.vegetable').length"
+    console.log "Begin test for real JQuery! -- each function"
+
+    $('div').each (index) -> 
+       console.log index
+
+    console.log "Begin test for Clark's bullshit UQuery -- each function"
     
-    # remove the vegetables, even though there aren't any.
-    Q('.vegetable').remove()
+    Q('div').each (index) -> 
+       console.log index
+     
 
-    # remove the pie
-    Q('#pie').remove()
+    console.log "Begin test for real JQuery! -- Output of JQuery"
 
-    @assertEvalEqual 2, "Q('.desert').length"
-    @assertEvalEqual 0, "Q('#pie').length"
-    @assertEvalEqual 2, "Q('div.desert').length"
-    @assertEvalEqual 0, "Q('div#pie').length"
+    console.log $('#mocha p')
+
+    console.log "Begin test for Clark's bullshit UQuery -- Output of UQuery"
+
+    console.log Q('#mocha p')
