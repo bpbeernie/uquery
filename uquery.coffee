@@ -61,7 +61,8 @@ class DomDecor
       this.E.push item
     this._recache()
     this
-
+  
+  #
   match: (selector)->
     matchSelector this.e, selector
 
