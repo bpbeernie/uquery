@@ -4,18 +4,21 @@
   $(function() {
     return UnitTest.run(function() {
       window.Q = uQuery;
-      console.log("Begin test for real JQuery! -- each function");
-      $('div').each(function(index) {
-        return console.log(index);
-      });
-      console.log("Begin test for Clark's bullshit UQuery -- each function");
-      Q('div').each(function(index) {
-        return console.log(index);
-      });
-      console.log("Begin test for real JQuery! -- Output of JQuery");
-      console.log($('#mocha p'));
-      console.log("Begin test for Clark's bullshit UQuery -- Output of UQuery");
-      return console.log(Q('#mocha p'));
+      this.assertEvalEqual(4, "Q('div').length");
+      this.assertEvalEqual(0, "Q('dl').length");
+      this.assertEvalEqual(3, "Q('.desert').length");
+      this.assertEvalEqual(1, "Q('#pie').length");
+      this.assertEvalEqual(3, "Q('div.desert').length");
+      this.assertEvalEqual('icing', "Q('div.desert .desert').get(0).id");
+      this.assertEvalEqual('desert', "Q('div#pie').get(0).className");
+      this.assertEvalEqual(0, "Q('#lettuce').length");
+      this.assertEvalEqual(0, "Q('.vegetable').length");
+      Q('.vegetable').remove();
+      Q('#pie').remove();
+      this.assertEvalEqual(2, "Q('.desert').length");
+      this.assertEvalEqual(0, "Q('#pie').length");
+      this.assertEvalEqual(2, "Q('div.desert').length");
+      return this.assertEvalEqual(0, "Q('div#pie').length");
     });
   });
 

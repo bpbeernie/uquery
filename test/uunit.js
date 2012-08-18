@@ -75,6 +75,27 @@ var UnitTest = {
 
     assertEvalEqual: function(val, expr) {
         this.assertEqual(eval(expr), val, expr)
-    }
+    },
+
+    verify: function(actual, expected, message) 
+    {
+        try 
+        {
+            this.assertEqual(actual(), expected(), message);
+
+            console.log("Begin test for real JQuery! -- " + message); 
+        
+            console.log(actual());
+
+            console.log("Begin test for Clark's bullshit uQuery! -- " + message);
+
+            console.log(expected());
+        }
+        catch (e) 
+        {
+                console.trace();
+                this.fail(message + " : "+ e.message);
+        }
+    },
 
 };
