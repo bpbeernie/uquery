@@ -3,22 +3,106 @@
 
   $(function() {
     return UnitTest.run(function() {
+      var actual, expected;
       window.Q = uQuery;
-      this.assertEvalEqual(4, "Q('div').length");
-      this.assertEvalEqual(0, "Q('dl').length");
-      this.assertEvalEqual(3, "Q('.desert').length");
-      this.assertEvalEqual(1, "Q('#pie').length");
-      this.assertEvalEqual(3, "Q('div.desert').length");
-      this.assertEvalEqual('icing', "Q('div.desert .desert').get(0).id");
-      this.assertEvalEqual('desert', "Q('div#pie').get(0).className");
-      this.assertEvalEqual(0, "Q('#lettuce').length");
-      this.assertEvalEqual(0, "Q('.vegetable').length");
-      Q('.vegetable').remove();
-      Q('#pie').remove();
-      this.assertEvalEqual(2, "Q('.desert').length");
-      this.assertEvalEqual(0, "Q('#pie').length");
-      this.assertEvalEqual(2, "Q('div.desert').length");
-      return this.assertEvalEqual(0, "Q('div#pie').length");
+      actual = function() {
+        return Q('div').length;
+      };
+      expected = function() {
+        return $('div').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('div').length");
+      actual = function() {
+        return Q('dl').length;
+      };
+      expected = function() {
+        return $('dl').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('dl').length");
+      actual = function() {
+        return Q('.desert').length;
+      };
+      expected = function() {
+        return $('.desert').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('.desert').length");
+      actual = function() {
+        return Q('#pie').length;
+      };
+      expected = function() {
+        return $('#pie').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('#pie').length");
+      actual = function() {
+        return Q('div.desert').length;
+      };
+      expected = function() {
+        return $('div.desert').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('div.desert').length");
+      actual = function() {
+        return Q('div.desert .desert').get(0).id;
+      };
+      expected = function() {
+        return $('div.desert .desert').get(0).id;
+      };
+      this.verify(actual, expected, "Verify basic output : $('div.desert .desert').get(0).id");
+      actual = function() {
+        return Q('div#pie').get(0).className;
+      };
+      expected = function() {
+        return $('div#pie').get(0).className;
+      };
+      this.verify(actual, expected, "Verify basic output : $('div#pie').get(0).className");
+      actual = function() {
+        return Q('#lettuce').length;
+      };
+      expected = function() {
+        return $('#lettuce').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('#lettuce').length");
+      actual = function() {
+        return Q('.vegetable').length;
+      };
+      expected = function() {
+        return $('.vegetable').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('.vegetable').length");
+      actual = function() {
+        return Q('.vegetable').remove();
+      };
+      expected = function() {
+        return $('.vegetable').remove();
+      };
+      this.verify(actual, expected, "Verify basic output : $('.vegetable').remove()");
+      actual = function() {
+        return Q('.desert').length;
+      };
+      expected = function() {
+        return $('.desert').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('.desert').length");
+      actual = function() {
+        return Q('#pie').length;
+      };
+      expected = function() {
+        return $('#pie').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('#pie').length");
+      actual = function() {
+        return Q('div.desert').length;
+      };
+      expected = function() {
+        return $('div.desert').length;
+      };
+      this.verify(actual, expected, "Verify basic output : $('div.desert').length");
+      actual = function() {
+        return Q('div#pie').length;
+      };
+      expected = function() {
+        return $('div#pie').length;
+      };
+      return this.verify(actual, expected, "Verify basic output : $('div#pie').length");
     });
   });
 
